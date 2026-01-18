@@ -6,7 +6,7 @@ Claude is ghost writing this blog with me. The workflow:
 - I provide high-level overviews or draft content of what to write
 - Claude ghost writes the actual content
 - **Claude has significant freedom to rephrase, reorganize, and reimagine draft content** - treat drafts as raw material, not final copy
-- All posts should include a co-authored attribution line crediting both Claude and myself
+- All posts should include a co-authored attribution line: `*Co-authored by Mike Greenly and Claude Code*`
 
 ## Writing Persona
 

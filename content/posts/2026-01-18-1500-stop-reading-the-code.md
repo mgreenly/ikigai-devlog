@@ -42,4 +42,4 @@ For now, the key insight is this: the less time you spend reading generated code
 
 ---
 
-*Co-authored by mgreenly and Claude*
+*Co-authored by Mike Greenly and Claude Code*

@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# Change to project root directory
+Dir.chdir(File.expand_path('../..', __dir__))
+
+require 'webrick'
+
+PORT = 8000
+PUBLIC_DIR = 'public'
+
+puts "Starting server on http://localhost:#{PORT}"
+puts "Serving files from #{PUBLIC_DIR}/"
+puts "Press Ctrl+C to stop"
+
+server = WEBrick::HTTPServer.new(
+  Port: PORT,
+  DocumentRoot: PUBLIC_DIR,
+  AccessLog: [],
+  Logger: WEBrick::Log.new('/dev/null')
+)
+
+# Add no-cache headers to all responses
+server.mount_proc '/' do |req, res|
+  res['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+  res['Pragma'] = 'no-cache'
+  res['Expires'] = '0'
+
+  WEBrick::HTTPServlet::FileHandler.new(server, PUBLIC_DIR).service(req, res)
+end
+
+trap('INT') { server.shutdown }
+
+server.start
