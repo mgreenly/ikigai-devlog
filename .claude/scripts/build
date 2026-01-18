@@ -1,0 +1,439 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'yaml'
+require 'digest'
+require 'date'
+require 'kramdown'
+
+# Build script for ikigai-devlog static site generator
+
+CONTENT_DIR = 'content'
+OUTPUT_DIR = 'public'
+POSTS_PER_PAGE = 10
+DIFF_THRESHOLD = 12
+
+class Entry
+  attr_accessor :type, :title, :slug, :published, :republished,
+                :content, :html, :filepath, :last_build_hash, :last_build_lines
+
+  def initialize(filepath, type)
+    @filepath = filepath
+    @type = type
+    parse_file
+  end
+
+  def parse_file
+    content = File.read(@filepath)
+
+    # Extract frontmatter
+    if content =~ /\A---\s*\n(.*?)\n---\s*\n(.*)/m
+      frontmatter = YAML.safe_load($1, permitted_classes: [Date, Time])
+      @content = $2
+
+      @title = frontmatter['title']
+      @slug = frontmatter['slug']
+      @published = Date.parse(frontmatter['published'].to_s)
+      @republished = frontmatter['republished'] || []
+      @last_build_hash = frontmatter['last_build_hash'] || ''
+      @last_build_lines = frontmatter['last_build_lines'] || 0
+
+      # Convert markdown to HTML
+      @html = Kramdown::Document.new(@content).to_html
+    else
+      raise "Invalid frontmatter in #{@filepath}"
+    end
+  end
+
+  def content_hash
+    Digest::SHA256.hexdigest(@content)
+  end
+
+  def url
+    if @type == 'page'
+      "/#{@slug}/"
+    else
+      "/posts/#{@slug}/"
+    end
+  end
+
+  # Generate feed items for this entry
+  def feed_items
+    items = [{
+      date: @published,
+      entry: self,
+      is_update: false
+    }]
+
+    # Add republish entries (only for pages)
+    if @type == 'page'
+      @republished.each do |update|
+        items << {
+          date: Date.parse(update['date'].to_s),
+          entry: self,
+          is_update: true,
+          update_summary: update['summary']
+        }
+      end
+    end
+
+    items
+  end
+end
+
+def load_entries
+  entries = []
+
+  # Load posts
+  Dir.glob("#{CONTENT_DIR}/posts/*.md").each do |filepath|
+    entries << Entry.new(filepath, 'post')
+  end
+
+  # Load pages
+  Dir.glob("#{CONTENT_DIR}/pages/*.md").each do |filepath|
+    entries << Entry.new(filepath, 'page')
+  end
+
+  entries
+end
+
+def build_feed(entries)
+  feed = []
+
+  entries.each do |entry|
+    feed.concat(entry.feed_items)
+  end
+
+  # Sort by date, newest first
+  feed.sort_by { |item| item[:date] }.reverse
+end
+
+def layout(title, content, current_url: nil, prev_url: nil, next_url: nil)
+  <<~HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>#{title} - Ikigai Devlog</title>
+      <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+      <header>
+        <h1><a href="/">Ikigai Devlog</a></h1>
+        <p class="subtitle">AI-assisted development journal</p>
+      </header>
+
+      <main>
+        #{content}
+      </main>
+
+      #{navigation_html(prev_url, next_url) if prev_url || next_url}
+
+      <footer>
+        <p><a href="/">Home</a></p>
+      </footer>
+    </body>
+    </html>
+  HTML
+end
+
+def navigation_html(prev_url, next_url)
+  <<~HTML
+    <nav class="post-navigation">
+      #{prev_url ? "<a href=\"#{prev_url}\" class=\"prev\">← Previous</a>" : '<span class="prev disabled">← Previous</span>'}
+      #{next_url ? "<a href=\"#{next_url}\" class=\"next\">Next →</a>" : '<span class="next disabled">Next →</span>'}
+    </nav>
+  HTML
+end
+
+def generate_entry_page(entry, prev_entry: nil, next_entry: nil)
+  output_dir = if entry.type == 'page'
+    "#{OUTPUT_DIR}/#{entry.slug}"
+  else
+    "#{OUTPUT_DIR}/posts/#{entry.slug}"
+  end
+
+  FileUtils.mkdir_p(output_dir)
+
+  content = <<~HTML
+    <article>
+      <h1>#{entry.title}</h1>
+      <time datetime="#{entry.published}">#{entry.published.strftime('%B %d, %Y')}</time>
+
+      #{entry.html}
+    </article>
+  HTML
+
+  prev_url = prev_entry ? prev_entry.url : nil
+  next_url = next_entry ? next_entry.url : nil
+
+  html = layout(entry.title, content,
+                current_url: entry.url,
+                prev_url: prev_url,
+                next_url: next_url)
+
+  File.write("#{output_dir}/index.html", html)
+end
+
+def generate_index_page(feed, page_num = 1)
+  start_idx = (page_num - 1) * POSTS_PER_PAGE
+  items = feed[start_idx, POSTS_PER_PAGE] || []
+
+  content = <<~HTML
+    <div class="feed">
+  HTML
+
+  items.each do |item|
+    entry = item[:entry]
+    date_str = item[:date].strftime('%B %d, %Y')
+
+    if item[:is_update]
+      content += <<~HTML
+        <article class="feed-item update">
+          <h2><a href="#{entry.url}">#{entry.title}</a></h2>
+          <time datetime="#{item[:date]}">Updated: #{date_str}</time>
+          <p class="update-summary">#{item[:update_summary]}</p>
+        </article>
+      HTML
+    else
+      # Get first paragraph as summary
+      summary = entry.html[/<p>(.*?)<\/p>/m, 1] || entry.html[0..200]
+
+      content += <<~HTML
+        <article class="feed-item">
+          <h2><a href="#{entry.url}">#{entry.title}</a></h2>
+          <time datetime="#{item[:date]}">#{date_str}</time>
+          <p>#{summary}</p>
+        </article>
+      HTML
+    end
+  end
+
+  content += "</div>\n"
+
+  # Pagination
+  total_pages = (feed.length.to_f / POSTS_PER_PAGE).ceil
+
+  if total_pages > 1
+    content += '<nav class="pagination">'
+
+    if page_num > 1
+      prev_page = page_num == 2 ? '/' : "/page-#{page_num - 1}.html"
+      content += "<a href=\"#{prev_page}\">← Newer</a>"
+    end
+
+    content += " <span>Page #{page_num} of #{total_pages}</span> "
+
+    if page_num < total_pages
+      content += "<a href=\"/page-#{page_num + 1}.html\">Older →</a>"
+    end
+
+    content += '</nav>'
+  end
+
+  html = layout('Home', content)
+
+  filename = page_num == 1 ? "#{OUTPUT_DIR}/index.html" : "#{OUTPUT_DIR}/page-#{page_num}.html"
+  File.write(filename, html)
+end
+
+def generate_css
+  FileUtils.mkdir_p("#{OUTPUT_DIR}/css")
+
+  css = <<~CSS
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+
+    header h1 a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    header .subtitle {
+      color: #666;
+      font-style: italic;
+    }
+
+    main {
+      margin-bottom: 40px;
+    }
+
+    article {
+      margin-bottom: 40px;
+    }
+
+    article h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    article h2 {
+      font-size: 1.5em;
+      margin: 30px 0 15px 0;
+    }
+
+    article time {
+      color: #666;
+      font-size: 0.9em;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .feed-item {
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .feed-item:last-child {
+      border-bottom: none;
+    }
+
+    .feed-item h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.5em;
+    }
+
+    .feed-item.update {
+      background: #f9f9f9;
+      padding: 15px;
+      border-left: 3px solid #4CAF50;
+    }
+
+    .update-summary {
+      font-style: italic;
+      color: #666;
+    }
+
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .post-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0;
+      padding: 20px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .post-navigation .disabled {
+      color: #ccc;
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 40px 0;
+      padding: 20px;
+    }
+
+    .pagination a {
+      margin: 0 10px;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+      text-align: center;
+      color: #666;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 3px;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    pre code {
+      padding: 0;
+    }
+  CSS
+
+  File.write("#{OUTPUT_DIR}/css/style.css", css)
+end
+
+def copy_assets
+  if Dir.exist?("#{CONTENT_DIR}/assets")
+    FileUtils.cp_r("#{CONTENT_DIR}/assets", OUTPUT_DIR)
+  end
+end
+
+# Main build process
+puts "Building ikigai-devlog..."
+
+# Clean output directory
+FileUtils.rm_rf(OUTPUT_DIR)
+FileUtils.mkdir_p(OUTPUT_DIR)
+
+# Load all entries
+puts "Loading content..."
+entries = load_entries
+puts "  Found #{entries.length} entries"
+
+# Build chronological feed
+puts "Building feed..."
+feed = build_feed(entries)
+
+# Generate individual entry pages
+puts "Generating entry pages..."
+entries.each_with_index do |entry, idx|
+  prev_entry = idx > 0 ? entries[idx - 1] : nil
+  next_entry = idx < entries.length - 1 ? entries[idx + 1] : nil
+  generate_entry_page(entry, prev_entry: prev_entry, next_entry: next_entry)
+end
+
+# Generate index and pagination pages
+puts "Generating index pages..."
+total_pages = (feed.length.to_f / POSTS_PER_PAGE).ceil
+(1..total_pages).each do |page_num|
+  generate_index_page(feed, page_num)
+end
+
+# Generate CSS
+puts "Generating CSS..."
+generate_css
+
+# Copy assets
+puts "Copying assets..."
+copy_assets
+
+puts "Build complete! Output in #{OUTPUT_DIR}/"

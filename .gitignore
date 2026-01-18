@@ -1,0 +1,9 @@
+# Build output
+public/
+
+# Ruby dependencies
+vendor/
+.bundle/
+
+# Bundler lockfile
+Gemfile.lock
