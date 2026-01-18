@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+# Load bundler and gems
+require 'bundler/setup'
+Bundler.require
+
 require 'fileutils'
 require 'yaml'
 require 'digest'
