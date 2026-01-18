@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+
+# Change to project root directory
+Dir.chdir(File.expand_path('../..', __dir__))
+
+require 'open3'
+
+INFRA_DIR = 'infra'
+PUBLIC_DIR = 'public'
+
+def get_terraform_output(key)
+  Dir.chdir(INFRA_DIR) do
+    output, status = Open3.capture2("terraform output -raw #{key}")
+    unless status.success?
+      puts "Error: Failed to get terraform output for '#{key}'"
+      puts "Make sure infrastructure is up (run 'infra_up' first)"
+      exit 1
+    end
+    output.strip
+  end
+end
+
+def ssh_exec(host, user, command)
+  ssh_cmd = "ssh -o StrictHostKeyChecking=accept-new #{user}@#{host} '#{command}'"
+  system(ssh_cmd) || exit(1)
+end
+
+def setup_server(host, user, domain)
+  puts "==> Setting up nginx and Let's Encrypt..."
+
+  puts "\n--- Installing nginx and certbot..."
+  ssh_exec(host, user, "sudo apt-get update && sudo apt-get install -y nginx certbot python3-certbot-nginx")
+
+  puts "\n--- Creating nginx site configuration..."
+  nginx_config = <<~CONFIG
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name #{domain};
+
+        root /var/www/#{domain};
+        index index.html;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+  CONFIG
+
+  # Write config file to server
+  ssh_exec(host, user, "echo '#{nginx_config}' | sudo tee /etc/nginx/sites-available/#{domain}")
+
+  puts "\n--- Creating document root..."
+  ssh_exec(host, user, "sudo mkdir -p /var/www/#{domain}")
+  ssh_exec(host, user, "sudo chown -R www-data:www-data /var/www/#{domain}")
+
+  puts "\n--- Enabling site..."
+  ssh_exec(host, user, "sudo ln -sf /etc/nginx/sites-available/#{domain} /etc/nginx/sites-enabled/")
+  ssh_exec(host, user, "sudo rm -f /etc/nginx/sites-enabled/default")
+  ssh_exec(host, user, "sudo nginx -t && sudo systemctl reload nginx")
+
+  puts "\n--- Obtaining SSL certificate..."
+  puts "Note: This will fail if DNS is not yet propagated to the server IP"
+  ssh_exec(host, user, "sudo certbot --nginx -d #{domain} --non-interactive --agree-tos --register-unsafely-without-email")
+
+  puts "\n✓ Server setup complete!"
+end
+
+def deploy_files(host, user, domain)
+  puts "==> Deploying files..."
+
+  unless Dir.exist?(PUBLIC_DIR)
+    puts "Error: #{PUBLIC_DIR}/ directory not found"
+    puts "Run 'build' first to generate the site"
+    exit 1
+  end
+
+  rsync_cmd = "rsync -avz --delete #{PUBLIC_DIR}/ #{user}@#{host}:/var/www/#{domain}/"
+  system(rsync_cmd) || exit(1)
+
+  puts "\n✓ Files deployed successfully!"
+end
+
+# Main script
+setup_mode = ARGV.include?('--setup')
+
+puts "Getting infrastructure details..."
+host = get_terraform_output('public_ip')
+user = get_terraform_output('ssh_user')
+domain = get_terraform_output('domain_name')
+
+puts "Target: #{user}@#{host} (#{domain})"
+
+if setup_mode
+  setup_server(host, user, domain)
+end
+
+deploy_files(host, user, domain)
+
+puts "\nSite is live at: https://#{domain}"

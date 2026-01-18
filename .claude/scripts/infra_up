@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+# Change to project root directory
+Dir.chdir(File.expand_path('../..', __dir__))
+
+INFRA_DIR = 'infra'
+
+puts "==> Initializing Terraform..."
+Dir.chdir(INFRA_DIR) do
+  system('terraform init') || exit(1)
+
+  puts "\n==> Planning infrastructure changes..."
+  system('terraform plan') || exit(1)
+
+  puts "\n==> Applying infrastructure changes..."
+  system('terraform apply') || exit(1)
+
+  puts "\n==> Infrastructure outputs:"
+  system('terraform output')
+end
+
+puts "\n✓ Infrastructure is up!"
+puts "\nTo connect: ssh admin@$(cd infra && terraform output -raw public_ip)"

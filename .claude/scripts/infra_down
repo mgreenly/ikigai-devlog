@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# Change to project root directory
+Dir.chdir(File.expand_path('../..', __dir__))
+
+INFRA_DIR = 'infra'
+
+puts "==> Destroying infrastructure..."
+Dir.chdir(INFRA_DIR) do
+  system('terraform destroy') || exit(1)
+end
+
+puts "\n✓ Infrastructure has been destroyed"

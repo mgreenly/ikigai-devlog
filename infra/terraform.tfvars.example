@@ -1,0 +1,11 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Required: Route53 hosted zone ID
+# Get this from AWS Console or from the parent Terraform project
+hosted_zone_id = "Z1234567890ABC"
+
+# Optional overrides (defaults shown)
+# domain_name = "ikigai.metaspot.org"
+# region = "us-east-2"
+# instance_type = "t4g.nano"
+# public_key_path = "~/.ssh/id_ecdsa.pub"
