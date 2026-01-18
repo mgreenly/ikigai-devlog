@@ -1,5 +1,16 @@
 <!-- Ruby is used for all scripting in this project -->
 
+# Version Control
+
+This is a **Jujutsu (jj) repository** backed by git. Important notes:
+
+- When asked to "commit", create **immutable commits** using git commands
+- Use `git add` and `git commit` - standard git workflow
+- **DO NOT** use `jj describe` to just update descriptions - this risks losing files
+- Commit means commit - create actual snapshots of the work
+- This project rides **main only** - no feature branches
+- When asked to "commit and push": make the current commit main and push it
+
 # Ghost Writing
 
 Claude is ghost writing this blog with me. The workflow:
