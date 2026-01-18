@@ -7,6 +7,7 @@ require 'open3'
 
 INFRA_DIR = 'infra'
 PUBLIC_DIR = 'public'
+NGINX_TEMPLATE = File.join(INFRA_DIR, 'nginx', 'site.conf')
 
 def get_terraform_output(key)
   Dir.chdir(INFRA_DIR) do
@@ -32,20 +33,14 @@ def setup_server(host, user, domain)
   ssh_exec(host, user, "sudo apt-get update && sudo apt-get install -y nginx certbot python3-certbot-nginx")
 
   puts "\n--- Creating nginx site configuration..."
-  nginx_config = <<~CONFIG
-    server {
-        listen 80;
-        listen [::]:80;
-        server_name #{domain};
 
-        root /var/www/#{domain};
-        index index.html;
+  # Read template and substitute domain
+  unless File.exist?(NGINX_TEMPLATE)
+    puts "Error: nginx template not found at #{NGINX_TEMPLATE}"
+    exit 1
+  end
 
-        location / {
-            try_files $uri $uri/ =404;
-        }
-    }
-  CONFIG
+  nginx_config = File.read(NGINX_TEMPLATE).gsub('{{DOMAIN}}', domain)
 
   # Write config file to server
   ssh_exec(host, user, "echo '#{nginx_config}' | sudo tee /etc/nginx/sites-available/#{domain}")
