@@ -126,11 +126,16 @@ def layout(title, content, current_url: nil, prev_url: nil, next_url: nil)
       <meta http-equiv="Expires" content="0">
       <title>#{title} - Ikigai Devlog</title>
       <link rel="stylesheet" href="/css/style.css">
+      <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     </head>
     <body>
       <header>
-        <h1><a href="/">Ikigai Devlog</a></h1>
-        <p class="subtitle">AI-assisted development journal</p>
+        <img src="/assets/profile.png" alt="Profile" class="profile-pic">
+        <div class="header-text">
+          <h1><a href="/">Ikigai Devlog</a></h1>
+          <p class="subtitle">AI-assisted development journal</p>
+        </div>
         <nav class="header-nav">
           <a href="https://github.com/mgreenly/ikigai" class="github-link">
             <svg class="github-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
@@ -279,6 +284,22 @@ def generate_css
       margin-bottom: 40px;
       padding-bottom: 20px;
       border-bottom: 2px solid #eee;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+    }
+
+    header .profile-pic {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      order: 2;
+      margin-left: auto;
+    }
+
+    header .header-text {
+      order: 1;
     }
 
     header h1 {
@@ -299,6 +320,8 @@ def generate_css
     header .header-nav {
       margin-top: 10px;
       font-size: 0.9em;
+      order: 3;
+      width: 100%;
     }
 
     header .header-nav .github-link {
