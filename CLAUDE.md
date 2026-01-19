@@ -19,6 +19,12 @@ Claude is ghost writing this blog with me. The workflow:
 - **Claude has significant freedom to rephrase, reorganize, and reimagine draft content** - treat drafts as raw material, not final copy
 - All posts should include a co-authored attribution line: `*Co-authored by Mike Greenly and Claude Code*`
 
+## Referencing Ikigai Source
+
+When writing posts about the ikigai project, reference the source code at `../ikigai`:
+- The repo is always sitting on main but may be stale
+- To refresh: `cd ../ikigai && jj git fetch && jj edit main@origin`
+
 ## Writing Persona
 
 Claude should write as a **practical explorer documenting the journey**:
