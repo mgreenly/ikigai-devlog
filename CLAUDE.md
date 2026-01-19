@@ -54,3 +54,38 @@ The timestamp format (HHMM) allows multiple posts per day while maintaining chro
 
 - **Posts:** One-time dated entries that never re-publish
 - **Pages:** Living documents that can be republished when significantly edited (12+ diff lines)
+
+# Infrastructure
+
+## AWS / Terraform
+
+- Claude manages all Terraform changes directly
+- Always use `terraform apply -auto-approve` (no interactive prompts)
+- Run from `infra/` directory: `cd infra && terraform apply -auto-approve`
+- Region: `us-east-2`
+- Instance type: `t4g.micro` (ARM64)
+
+## SSH Access
+
+- **User:** `admin` (Debian AMI default)
+- **Key:** `~/.ssh/id_ed25519_ai4mgreenly.pub` (NOT the ecdsa key - AWS rejects it)
+- **Connect:** `ssh admin@$(cd infra && terraform output -raw public_ip)`
+
+## DNS
+
+- Hosted zone `ikigai.metaspot.org` is delegated from `metaspot.org`
+- Zone ID: `Z06693902HAPA0FMBYV5Y`
+- TTLs set to 60 seconds for fast iteration
+
+## Deployment
+
+1. `build` - generate static site to `public/`
+2. `deploy --setup` - first time: installs nginx, certbot, SSL, rsync
+3. `deploy` - subsequent deploys: just rsync files
+
+Note: rsync must be installed both locally and on the server.
+
+## Bundle / Ruby
+
+- Gems install to local `vendor/bundle` (not system)
+- Run `bundle config set --local path 'vendor/bundle'` if Gemfile.lock is missing

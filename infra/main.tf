@@ -146,6 +146,6 @@ resource "aws_route53_record" "apex" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = var.domain_name
   type    = "A"
-  ttl     = 300
+  ttl     = 60
   records = [aws_eip.main.public_ip]
 }

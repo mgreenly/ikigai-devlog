@@ -4,6 +4,7 @@
 Dir.chdir(File.expand_path('../..', __dir__))
 
 require 'open3'
+require 'base64'
 
 INFRA_DIR = 'infra'
 PUBLIC_DIR = 'public'
@@ -29,8 +30,8 @@ end
 def setup_server(host, user, domain)
   puts "==> Setting up nginx and Let's Encrypt..."
 
-  puts "\n--- Installing nginx and certbot..."
-  ssh_exec(host, user, "sudo apt-get update && sudo apt-get install -y nginx certbot python3-certbot-nginx")
+  puts "\n--- Installing nginx, certbot, and rsync..."
+  ssh_exec(host, user, "sudo apt-get update && sudo apt-get install -y nginx certbot python3-certbot-nginx rsync")
 
   puts "\n--- Creating nginx site configuration..."
 
@@ -42,12 +43,13 @@ def setup_server(host, user, domain)
 
   nginx_config = File.read(NGINX_TEMPLATE).gsub('{{DOMAIN}}', domain)
 
-  # Write config file to server
-  ssh_exec(host, user, "echo '#{nginx_config}' | sudo tee /etc/nginx/sites-available/#{domain}")
+  # Write config file to server using base64 to avoid shell escaping issues
+  encoded_config = Base64.strict_encode64(nginx_config)
+  ssh_exec(host, user, "echo #{encoded_config} | base64 -d | sudo tee /etc/nginx/sites-available/#{domain}")
 
   puts "\n--- Creating document root..."
   ssh_exec(host, user, "sudo mkdir -p /var/www/#{domain}")
-  ssh_exec(host, user, "sudo chown -R www-data:www-data /var/www/#{domain}")
+  ssh_exec(host, user, "sudo chown -R #{user}:#{user} /var/www/#{domain}")
 
   puts "\n--- Enabling site..."
   ssh_exec(host, user, "sudo ln -sf /etc/nginx/sites-available/#{domain} /etc/nginx/sites-enabled/")
