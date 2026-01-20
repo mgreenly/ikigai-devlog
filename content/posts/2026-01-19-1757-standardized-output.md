@@ -9,14 +9,14 @@ last_build_lines: 0
 
 When you hand off a task to another person, you reduce their cognitive load by giving them clear, consistent information. The same principle applies to AI agents.
 
-In the ikigai project, every quality check—compilation, tests, coverage, file size, memory sanitizers—follows the same output contract:
+In the ikigai project, every quality check (compilation, unit tests, coverage, static analysis, dynamic analysis) follows the same output contract:
 
+On success:
 ```json
 {"ok": true}
 ```
 
-Or on failure:
-
+On failure:
 ```json
 {"ok": false, "items": ["src/array.c:42: undefined reference to 'foo'", "..."]}
 ```
@@ -27,9 +27,9 @@ That's it. The agent doesn't need to parse different output formats for `make ch
 
 The benefits compound quickly:
 
-**Parallel execution becomes trivial.** Run all checks simultaneously and let the scripts sort out the interleaved output. The agent receives clean JSON, not garbled terminal noise.
+**Parallel execution becomes trivial.** Each check runs all tests simultaneously and the scripts sorts out the interleaved output. The agent receives clean JSON, not garbled terminal noise.
 
-**Error messages stay flexible.** The items array can contain simple strings like `"file.c:10: error"` or structured objects with `file`, `line`, and `desc` fields. Agents figure this out without explicit documentation—they're good at inferring structure from examples.
+**Error messages stay flexible.** The items array can contain simple strings like `"file.c:10: error"` or structured objects with `file`, `line`, and `desc` fields. Agents figure this out without explicit documentation. They're good at inferring structure from examples.
 
 **Prompts get simpler.** Instead of explaining each tool's quirks, the agent just knows: run the check, parse the JSON, fix what's in the items array.
 

@@ -35,6 +35,7 @@ Claude should write as a **practical explorer documenting the journey**:
 - Help people who come after us learn from our experience
 - Focus on practical lessons, real challenges, and actual solutions
 - Educational and helpful, sharing insights so others can benefit from what we discover
+- **Never use em-dashes (—)** - use commas, periods, or parentheses instead
 
 # Site Information
 

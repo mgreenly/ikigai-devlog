@@ -148,6 +148,12 @@ def layout(title, content, current_url: nil, prev_url: nil, next_url: nil)
             </svg>
             Ikigai on GitHub
           </a>
+          <a href="/feed.xml" class="rss-link">
+            <svg class="rss-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <path fill="currentColor" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm1.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0-5.5a1 1 0 0 1 0-2 5.5 5.5 0 0 1 5.5 5.5 1 1 0 0 1-2 0 3.5 3.5 0 0 0-3.5-3.5zm0-4a1 1 0 0 1 0-2 9.5 9.5 0 0 1 9.5 9.5 1 1 0 0 1-2 0 7.5 7.5 0 0 0-7.5-7.5z"/>
+            </svg>
+            RSS
+          </a>
         </nav>
       </header>
 
@@ -285,6 +291,10 @@ def generate_css
       padding: 20px;
     }
 
+    p {
+      margin-bottom: 1.2em;
+    }
+
     header {
       margin-bottom: 40px;
       padding-bottom: 20px;
@@ -342,6 +352,24 @@ def generate_css
     }
 
     header .header-nav .github-icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    header .header-nav .rss-link {
+      color: #f26522;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 15px;
+    }
+
+    header .header-nav .rss-link:hover {
+      text-decoration: underline;
+    }
+
+    header .header-nav .rss-icon {
       display: inline-block;
       vertical-align: middle;
     }
@@ -491,6 +519,65 @@ def copy_assets
   end
 end
 
+def generate_rss(feed)
+  site_url = "https://ikigai.metaspot.org"
+
+  items_xml = feed.first(20).map do |item|
+    entry = item[:entry]
+    pub_date = item[:date].strftime("%a, %d %b %Y 00:00:00 GMT")
+
+    # Use slug as GUID for stability across rebuilds
+    guid = "#{site_url}#{entry.url}"
+
+    title = if item[:is_update]
+      "Updated: #{entry.title}"
+    else
+      entry.title
+    end
+
+    description = if item[:is_update] && item[:update_summary]
+      item[:update_summary]
+    else
+      entry.html.gsub(/<[^>]+>/, '').slice(0, 500) + "..."
+    end
+
+    <<~ITEM
+      <item>
+        <title>#{escape_xml(title)}</title>
+        <link>#{guid}</link>
+        <guid isPermaLink="true">#{guid}</guid>
+        <pubDate>#{pub_date}</pubDate>
+        <description>#{escape_xml(description)}</description>
+      </item>
+    ITEM
+  end.join("\n")
+
+  rss = <<~RSS
+    <?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+      <channel>
+        <title>Ikigai Devlog</title>
+        <link>#{site_url}</link>
+        <description>AI-assisted development journal</description>
+        <language>en-us</language>
+        <atom:link href="#{site_url}/feed.xml" rel="self" type="application/rss+xml"/>
+        #{items_xml}
+      </channel>
+    </rss>
+  RSS
+
+  File.write("#{OUTPUT_DIR}/feed.xml", rss)
+end
+
+def escape_xml(text)
+  text.to_s
+    .gsub('&', '&amp;')
+    .gsub('<', '&lt;')
+    .gsub('>', '&gt;')
+    .gsub('"', '&quot;')
+    .gsub("'", '&apos;')
+end
+
 # Main build process
 puts "Building ikigai-devlog..."
 
@@ -521,6 +608,10 @@ total_pages = (feed.length.to_f / POSTS_PER_PAGE).ceil
 (1..total_pages).each do |page_num|
   generate_index_page(feed, page_num)
 end
+
+# Generate RSS feed
+puts "Generating RSS feed..."
+generate_rss(feed)
 
 # Generate CSS
 puts "Generating CSS..."
