@@ -1,7 +1,7 @@
 ---
 title: "Standardized Output for AI Agents"
 slug: "standardized-output"
-published:
+published: 2026-01-19
 republished: []
 last_build_hash: ""
 last_build_lines: 0

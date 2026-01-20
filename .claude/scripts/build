@@ -11,6 +11,7 @@ require 'yaml'
 require 'digest'
 require 'date'
 require 'kramdown'
+require 'rouge'
 
 # Build script for ikigai-devlog static site generator
 
@@ -44,8 +45,12 @@ class Entry
       @last_build_hash = frontmatter['last_build_hash'] || ''
       @last_build_lines = frontmatter['last_build_lines'] || 0
 
-      # Convert markdown to HTML
-      @html = Kramdown::Document.new(@content).to_html
+      # Convert markdown to HTML with syntax highlighting
+      @html = Kramdown::Document.new(@content, {
+        input: 'GFM',
+        syntax_highlighter: :rouge,
+        syntax_highlighter_opts: { css_class: 'highlight' }
+      }).to_html
     else
       raise "Invalid frontmatter in #{@filepath}"
     end
@@ -449,7 +454,33 @@ def generate_css
     pre code {
       padding: 0;
     }
+
+    /* Code blocks with syntax highlighting */
+    .highlight {
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .highlighter-rouge {
+      margin-bottom: 1.5em;
+    }
+
+    pre {
+      margin-bottom: 1.5em;
+    }
+
+    /* Attribution line */
+    article > p:last-child em {
+      display: block;
+      margin-top: 2em;
+      color: #666;
+    }
   CSS
+
+  # Add Rouge GitHub syntax highlighting theme
+  css += "\n/* Syntax highlighting - GitHub theme */\n"
+  css += Rouge::Themes::Github.render(scope: '.highlight')
 
   File.write("#{OUTPUT_DIR}/css/style.css", css)
 end
