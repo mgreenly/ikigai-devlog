@@ -1,7 +1,7 @@
 ---
 title: "When --version Lies"
 slug: "when-version-lies"
-published:
+published: 2026-01-19
 republished: []
 last_build_hash: ""
 last_build_lines: 0
