@@ -7,3 +7,6 @@ vendor/
 
 # Bundler lockfile
 Gemfile.lock
+
+# Draft posts
+draft.md
