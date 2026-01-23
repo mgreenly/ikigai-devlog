@@ -81,9 +81,11 @@ The timestamp format (HHMM) allows multiple posts per day while maintaining chro
 
 ## Deployment
 
-1. `build` - generate static site to `public/`
-2. `deploy --setup` - first time: installs nginx, certbot, SSL, rsync
-3. `deploy` - subsequent deploys: just rsync files
+Scripts are in `.claude/scripts/`:
+
+1. `.claude/scripts/build` - generate static site to `public/`
+2. `.claude/scripts/deploy --setup` - first time: installs nginx, certbot, SSL, rsync
+3. `.claude/scripts/deploy` - subsequent deploys: just rsync files
 
 Note: rsync must be installed both locally and on the server.
 
