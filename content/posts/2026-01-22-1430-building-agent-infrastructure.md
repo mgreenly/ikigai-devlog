@@ -28,12 +28,12 @@ The next release adds what I'm calling Ikigai's internal file system. Since Ikig
 
 Files will use a URI prefix: `ik://shared/notes.txt`. System prompts make clear that agents can use these paths with any file tool. Under the hood, Ikigai translates `ik://` to normal filesystem paths, but the agents don't need to know that.
 
-The first implementation keeps it simple. We map `ik://` to `$XDG_STATE_HOME/ikigai`, which with a default install ends up at `$HOME/.local/state/ikigai`. No distributed storage yet. That's future work once we understand usage patterns better.
+The first implementation keeps it simple. We map `ik://` to `$XDG_STATE_HOME/ikigai`, which with a default install ends up at `$HOME/.local/state/ikigai`. No distributed storage yet. That's a client/server architecture feature coming later, and there's no need for it until then.
 
-## Why This Matters
+## Why These Matter
 
-These primitives (structured queues, shared file space) are infrastructure for the skill system. Skills need to pass data between agents, queue work items, and maintain state across invocations. The `list` tool and `ik://` paths give them clean interfaces to do that.
+The queue is useful for everyday agent work. Refactoring a list of files, processing items one by one, tracking what's done and what's left. Agents already do this kind of thing, now they have a proper data structure for it.
 
-We're building this piece by piece, seeing what agents actually use.
+The internal file system is where skills live. Skills need to be shared across all projects, not tied to any single codebase. The `ik://` namespace gives them a home that travels with the user.
 
 *Co-authored by Mike Greenly and Claude Code*
