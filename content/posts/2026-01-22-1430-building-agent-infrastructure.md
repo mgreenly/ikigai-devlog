@@ -34,6 +34,6 @@ The first implementation keeps it simple. We map `ik://` to `$XDG_STATE_HOME/iki
 
 The queue is useful for everyday agent work. Refactoring a list of files, processing items one by one, tracking what's done and what's left. Agents already do this kind of thing, now they have a proper data structure for it.
 
-The internal file system is where skills live. Skills need to be shared across all projects, not tied to any single codebase. The `ik://` namespace gives them a home that travels with the user.
+The internal file system is where shared skills will live. Some skills will be project-specific, but skills that need to work across projects go in `ik://`.
 
 *Co-authored by Mike Greenly and Claude Code*

@@ -37,6 +37,8 @@ Claude should write as a **practical explorer documenting the journey**:
 - Educational and helpful, sharing insights so others can benefit from what we discover
 - **Never use em-dashes (—)** - use commas, periods, or parentheses instead
 - **Use "We're" not subject-less participles** - write "We're building this" not "Building this"
+- **Do not infer or extrapolate** - only write what you can verify from `../ikigai` source code or previous posts in this blog. If you don't know something, ask.
+- **Explore sources before writing** - take the time to read relevant code in `../ikigai` and previous posts. Use what you learn to improve accuracy and add real details.
 
 # Site Information
 
