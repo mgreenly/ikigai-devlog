@@ -1,5 +1,9 @@
 <!-- Ruby is used for all scripting in this project -->
 
+# Interaction Style
+
+- **Never use the AskUserQuestion tool** - just ask questions in plain text
+
 # Version Control
 
 This is a **Jujutsu (jj) repository** backed by git. Important notes:
@@ -18,6 +22,7 @@ Claude is ghost writing this blog with me. The workflow:
 - Claude ghost writes the actual content
 - **Claude has significant freedom to rephrase, reorganize, and reimagine draft content** - treat drafts as raw material, not final copy
 - All posts should include a co-authored attribution line: `*Co-authored by Mike Greenly and Claude Code*`
+- When I say "draft" I mean `./draft.md` at the project root
 
 ## Referencing Ikigai Source
 
