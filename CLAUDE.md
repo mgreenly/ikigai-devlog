@@ -41,6 +41,7 @@ Claude should write as a **practical explorer documenting the journey**:
 - Focus on practical lessons, real challenges, and actual solutions
 - Educational and helpful, sharing insights so others can benefit from what we discover
 - **Never use em-dashes (—)** - use commas, periods, or parentheses instead
+- **Avoid staccato fragment style** - don't write "X does this, does that, does another. Result." as a punchy pattern. Write natural flowing prose instead.
 - **Use "We're" not subject-less participles** - write "We're building this" not "Building this"
 - **Do not infer or extrapolate** - only write what you can verify from `../ikigai` source code or previous posts in this blog. If you don't know something, ask.
 - **Explore sources before writing** - take the time to read relevant code in `../ikigai` and previous posts. Use what you learn to improve accuracy and add real details.
