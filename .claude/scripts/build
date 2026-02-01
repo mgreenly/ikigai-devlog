@@ -166,6 +166,14 @@ def layout(title, content, current_url: nil, prev_url: nil, next_url: nil)
       <footer>
         #{current_url != '/' ? '<p><a href="/">Home</a></p>' : ''}
       </footer>
+      <script>
+        document.querySelectorAll('article a').forEach(function(link) {
+          if (link.hostname !== window.location.hostname) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener');
+          }
+        });
+      </script>
     </body>
     </html>
   HTML
@@ -389,7 +397,12 @@ def generate_css
 
     article h2 {
       font-size: 1.5em;
-      margin: 30px 0 15px 0;
+      margin: 30px 0 5px 0;
+    }
+
+    article h3 {
+      font-size: 1.25em;
+      margin: 30px 0 5px 0;
     }
 
     article time {
@@ -496,6 +509,18 @@ def generate_css
 
     pre {
       margin-bottom: 1.5em;
+    }
+
+    blockquote {
+      border-left: 3px solid #ccc;
+      margin: 1.5em 0;
+      padding: 0.5em 0 0.5em 1.5em;
+      color: #555;
+      font-style: italic;
+    }
+
+    blockquote p {
+      margin-bottom: 0;
     }
 
     /* Attribution line */

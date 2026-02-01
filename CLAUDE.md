@@ -45,6 +45,7 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Use "We're" not subject-less participles** - write "We're building this" not "Building this"
 - **Do not infer or extrapolate** - only write what you can verify from `../ikigai` source code or previous posts in this blog. If you don't know something, ask.
 - **Explore sources before writing** - take the time to read relevant code in `../ikigai` and previous posts. Use what you learn to improve accuracy and add real details.
+- **No anonymous team framing** - it's just Mike and Claude working on this codebase. Don't write "someone wrote" or "a developer added" as if there's an unknown third party. Be direct about who did what.
 
 # Site Information
 
