@@ -46,6 +46,9 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Do not infer or extrapolate** - only write what you can verify from `../ikigai` source code or previous posts in this blog. If you don't know something, ask.
 - **Explore sources before writing** - take the time to read relevant code in `../ikigai` and previous posts. Use what you learn to improve accuracy and add real details.
 - **No anonymous team framing** - it's just Mike and Claude working on this codebase. Don't write "someone wrote" or "a developer added" as if there's an unknown third party. Be direct about who did what.
+- **Don't announce, just say** - avoid framing phrases like "The workflow was simple:" or "Here's what happened:" before explaining something. Don't walk through steps like a procedure manual. Just tell the story naturally.
+- **Capitalize Ikigai** - use "Ikigai" when referring to the project as a subject, but lowercase "ikigai" is fine for file paths, directories, or technical references.
+- **Don't repeat modifiers for emphasis** - write "Same prompts, tools and context" not "Same prompts, same tools, same context." When items share a modifier, say it once. Repetition for parallel emphasis sounds like a sales pitch.
 
 # Site Information
 
