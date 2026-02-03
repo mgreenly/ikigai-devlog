@@ -19,11 +19,11 @@ I don't wait for releases to fix problems. Throughout the development cycle I'm 
 
 ## Clone, Work, Push, Delete
 
-When I hand a task to an agent, I clone the repo fresh and point the agent at main@origin. The agent works, commits, pushes, opens a PR, and then the local clone gets deleted. I don't keep agent work locally. Everything lives in GitHub.
+When I hand a task to an agent, I clone the repo fresh and point the agent at main@origin. The agent works, commits, pushes, opens a PR, and then the local cloned repo gets deleted. I don't keep agent work locally. Everything lives in GitHub.
 
-This loop repeats continuously: clone, do the work, push, PR, delete. Any number of agents can run this loop simultaneously because each one works in its own isolated clone.
+This loop repeats continuously: clone, do the work, push, PR, delete. Any number of agents can run this loop simultaneously because each one works in its own isolated cloned repo.
 
-The key insight is that clones are disposable. There's no local state to manage, no branches to track, no cleanup to do later. An agent finishes, the PR exists in GitHub, and the clone disappears.
+The key insight is that cloned repos are disposable. There's no local state to manage, no branches to track, no cleanup to do later. An agent finishes, the PR exists in GitHub, and the cloned repo disappears.
 
 ## Handling Merge Conflicts
 
@@ -41,7 +41,7 @@ Traditional development workflows assume a human developer with a persistent loc
 
 Agent workflows flip this around. Agents don't need persistent environments. They don't get confused switching contexts. They don't have half-finished work scattered across branches. Each task gets a clean slate.
 
-This isolation is what enables horizontal scaling. Five agents working in five separate clones can't conflict with each other during development. They only interact at the PR level, where GitHub's merge machinery handles coordination.
+This isolation is what enables horizontal scaling. Five agents working in five separate cloned repos can't conflict with each other during development. They only interact at the PR level, where GitHub's merge machinery handles coordination.
 
 The bottleneck becomes how well you can decompose work into independent goals, not how fast any single agent can execute.
 
