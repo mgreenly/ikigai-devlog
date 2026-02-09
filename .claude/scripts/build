@@ -553,6 +553,25 @@ def generate_css
       margin-top: 2em;
       color: #666;
     }
+
+    /* Images in articles */
+    article img {
+      display: block;
+      max-width: 90%;
+      height: auto;
+      margin: 1.5em auto;
+    }
+
+    /* Lists in articles */
+    article ol,
+    article ul {
+      margin-left: 5%;
+      margin-bottom: 1.5em;
+    }
+
+    article li {
+      margin-bottom: 0.5em;
+    }
   CSS
 
   # Add Rouge GitHub syntax highlighting theme
