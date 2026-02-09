@@ -48,6 +48,7 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Capitalize Ikigai** - use "Ikigai" when referring to the project as a subject, but lowercase "ikigai" is fine for file paths, directories, or technical references.
 - **Don't repeat modifiers for emphasis** - write "Same prompts, tools and context" not "Same prompts, same tools, same context." When items share a modifier, say it once. Repetition for parallel emphasis sounds like a sales pitch.
 - **Use vivid metaphors for technical concepts** - "The next step is divorce: extracting the orchestrator" beats "The next step is to extract the orchestrator." Concrete human words make dry technical ideas land harder.
+- **First paragraph is the hook** - the opening paragraph appears as the summary on the index page. Write it to draw readers in, not just introduce the topic. Make them want to click through.
 
 # Site Information
 
