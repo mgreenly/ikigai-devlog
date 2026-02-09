@@ -10,3 +10,6 @@ Gemfile.lock
 
 # Draft posts
 draft.md
+
+# Debug screenshots in root
+/*.png
