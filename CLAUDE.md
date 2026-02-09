@@ -26,9 +26,7 @@ Claude is ghost writing this blog with me. The workflow:
 
 ## Referencing Ikigai Source
 
-When writing posts about the ikigai project, reference the source code at `../ikigai`:
-- The repo is always sitting on main but may be stale
-- To refresh: `cd ../ikigai && jj git fetch && jj edit main@origin`
+When writing posts about the ikigai project, reference the source code at `../ikigai-1`
 
 ## Writing Persona
 
@@ -49,6 +47,7 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Don't announce, just say** - avoid framing phrases like "The workflow was simple:" or "Here's what happened:" before explaining something. Don't walk through steps like a procedure manual. Just tell the story naturally.
 - **Capitalize Ikigai** - use "Ikigai" when referring to the project as a subject, but lowercase "ikigai" is fine for file paths, directories, or technical references.
 - **Don't repeat modifiers for emphasis** - write "Same prompts, tools and context" not "Same prompts, same tools, same context." When items share a modifier, say it once. Repetition for parallel emphasis sounds like a sales pitch.
+- **Use vivid metaphors for technical concepts** - "The next step is divorce: extracting the orchestrator" beats "The next step is to extract the orchestrator." Concrete human words make dry technical ideas land harder.
 
 # Site Information
 
