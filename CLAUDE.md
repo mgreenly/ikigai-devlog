@@ -49,6 +49,8 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Don't repeat modifiers for emphasis** - write "Same prompts, tools and context" not "Same prompts, same tools, same context." When items share a modifier, say it once. Repetition for parallel emphasis sounds like a sales pitch.
 - **Use vivid metaphors for technical concepts** - "The next step is divorce: extracting the orchestrator" beats "The next step is to extract the orchestrator." Concrete human words make dry technical ideas land harder.
 - **First paragraph is the hook** - the opening paragraph appears as the summary on the index page. Write it to draw readers in, not just introduce the topic. Make them want to click through.
+- **Link to previous posts** - when referencing a previous blog post by name, make it a link using the format `[Post Title](/posts/slug/)`
+- **Lead with the point, not the qualifiers** - don't front-load sentences with time, context, and conditions before delivering the actual idea. "C was the right choice twelve weeks ago for a second reason beyond packaging" makes the reader hold three things before reaching the point. "Packaging wasn't the only reason we started in C" gets there immediately.
 
 # Site Information
 
