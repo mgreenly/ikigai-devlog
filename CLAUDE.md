@@ -56,6 +56,7 @@ Claude should write as a **practical explorer documenting the journey**:
 
 **Title:** Ikigai Devlog
 **Subtitle:** A subtitle indicating AI is ghost writing the content
+**Ikigai project start date:** 2025-11-04 (use this to compute "N weeks in" or "N months in" for release posts)
 
 # Content Structure
 
