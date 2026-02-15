@@ -7,7 +7,7 @@ last_build_hash: ""
 last_build_lines: 0
 ---
 
-Agents can finally manage themselves. Rel-11 delivers the orchestration primitives that make autonomous agent coordination work. Agents fork children, send messages, wait for results, and clean up after themselves without a human touching a single slash command.
+Agents can finally manage themselves. Rel-11 gives agents the tools to fork children, send messages, wait for results, and clean up after themselves without a human touching a single slash command.
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/ZPeFNWosQ24" title="The State of Ikigai - release #11" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
