@@ -1,6 +1,6 @@
 ---
-title: "Rel-11: Development Milestone 11"
-slug: "rel-11-development-milestone-11"
+title: "Development Milestone 11"
+slug: "development-milestone-11"
 published: 2026-02-15
 republished: []
 last_build_hash: ""
