@@ -61,7 +61,9 @@ Here's what an actual test looks like:
 }
 ```
 
-Clear the screen, switch to a model, queue a canned response, say hello, read what's on screen, and verify the right things showed up. That's the entire test. You can see it in action here: https://youtu.be/nOynLkl0pOA
+Clear the screen, switch to a model, queue a canned response, say hello, read what's on screen, and verify the right things showed up. That's the entire test. You can see it in action here:
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/nOynLkl0pOA" title="Ikigai Dev Stream - 02/19" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## The LLM Variability Problem
 
@@ -75,9 +77,7 @@ Right now we have 13 e2e tests, one for each supported model across Anthropic, O
 
 ## Beyond Chat
 
-Chat responses are just the starting point. The same approach works for memory leaks under Valgrind, performance benchmarks with defined thresholds, even verifying that the renderer produces the correct ANSI escape sequences. Anything you care about in software quality can be reduced to something you measure and assert.
-
-Software is deterministic. Given the same input, it produces the same output. That means every behavior you care about can be pinned down with a test. If every requirement has one, and every test passes, the code is correct by definition. It doesn't matter whether it's elegant, idiomatic, or anything a human would have written.
+Chat responses are just the starting point. The same approach works for memory leaks under Valgrind, performance benchmarks with defined thresholds, even verifying that the renderer produces the correct ANSI escape sequences. Software is deterministic. Given the same input, it produces the same output. If every requirement has a test and every test passes, the code is correct by definition. It doesn't matter whether it's elegant, idiomatic, or anything a human would have written.
 
 ## What's Left for the Human
 
