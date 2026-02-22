@@ -52,6 +52,8 @@ Claude should write as a **practical explorer documenting the journey**:
 - **Link to previous posts** - when referencing a previous blog post by name, make it a link using the format `[Post Title](/posts/slug/)`
 - **YouTube embeds** - use `width="100%" height="400"` so the video fits within the content area. Never use the full-size dimensions from YouTube's embed code.
 - **Lead with the point, not the qualifiers** - don't front-load sentences with time, context, and conditions before delivering the actual idea. "C was the right choice twelve weeks ago for a second reason beyond packaging" makes the reader hold three things before reaching the point. "Packaging wasn't the only reason we started in C" gets there immediately.
+- **Don't over-dramatize routine work** - adding model support, fixing bugs, and writing tests are normal development. Don't frame them as achievements or milestones within the post. State what happened plainly. "We added five models" not "Five new models joined the registry." Avoid listing every item when a summary will do. The changelog exists for exhaustive details.
+- **Release posts aren't changelogs** - summarize at the level a reader cares about, not at the level of individual commits. If three similar bugs got fixed, that's one sentence about the category of fix, not three paragraphs explaining each one. Link to the changelog for details.
 
 # Site Information
 
