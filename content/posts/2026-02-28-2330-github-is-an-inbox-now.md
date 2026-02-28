@@ -27,13 +27,11 @@ If someone wants to contribute to a project running an agentic pipeline, the use
 
 "Add dark mode support" as a pull request with 400 lines of CSS is a problem. Does it match the project's conventions? Does it break existing tests? Does it interact correctly with the theme system? The contributor handled the *how* without necessarily understanding the full context that the agent has access to.
 
-## GitHub Isn't Dead, It's Repositioned
+## Just Another Front Door
 
-GitHub Issues and Discussions still work. They're channels for intent: bug reports, feature requests, design conversations. That's valuable input for any pipeline, agentic or not.
+Once you strip away PRs, GitHub is a ticket system that happens to sit next to a code viewer. Issues and Discussions carry intent, but so does email, Discord, a shared doc, or a conversation in any project management tool. The code viewer doesn't add much when nobody's reading the code.
 
-But the PR, the mechanism that made GitHub the center of software development for fifteen years, assumes humans write code and other humans verify it. Neither assumption holds when agents are doing the work. The verification is automated through test gates. The implementation is generated from specs. The PR sits between those two things doing nothing.
-
-GitHub becomes an inbox. A place where intent arrives. The pipeline takes it from there.
+The PR was what made GitHub special. It was the mechanism that tied code review, CI, and deployment into a single workflow. Take that away and GitHub is one of many possible channels for "here's what I want the software to do." We'll probably keep using it because that's where people look for open source projects. But it's inertia and discoverability, not technical necessity.
 
 ---
 
