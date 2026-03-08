@@ -7,7 +7,7 @@ last_build_hash: ""
 last_build_lines: 0
 ---
 
-Pull requests are code disguised as collaboration. Someone forks your repo, writes an implementation, and hands you a diff. Now you're debugging their assumptions instead of building your own. In an agentic workflow, that's worse than useless. It's a distraction shaped like a contribution.
+Pull requests deliver implementation when what you need is intent. Someone forks your repo and hands you code, but code is the easy part in an agentic workflow. An agent can generate it from a clear specification. What you actually need is the idea behind the contribution, what the software should do that it doesn't yet. A PR obscures that under code you didn't need in the first place.
 
 We wrote about [ripping GitHub out of the Ralph pipeline](/posts/ditching-the-pull-request/) earlier today. That post was about the mechanics: local bare repos, simpler state machines, fewer failure modes. This one is about a broader realization. PRs aren't just unnecessary infrastructure. They're the wrong abstraction for how software gets built when agents do the building.
 
@@ -29,9 +29,9 @@ If someone wants to contribute to a project running an agentic pipeline, the use
 
 ## Just Another Front Door
 
-Once you strip away PRs, GitHub is a ticket system that happens to sit next to a code viewer. Issues and Discussions carry intent, but so does email, Discord, a shared doc, or a conversation in any project management tool. The code viewer doesn't add much when nobody's reading the code.
+Without PRs, GitHub is a ticket system next to a code viewer. Issues carry intent, but so does any communication channel. The code viewer doesn't add much when nobody's reading the code.
 
-The PR was what made GitHub special. It was the mechanism that tied code review, CI, and deployment into a single workflow. Take that away and GitHub is one of many possible channels for "here's what I want the software to do." We'll probably keep using it because that's where people look for open source projects. But it's inertia and discoverability, not technical necessity.
+PRs were what made GitHub special, the mechanism tying code review, CI, and deployment into one workflow. Without them, GitHub is just one of many channels for "here's what I want the software to do." We keep using it because that's where people look for open source projects, but that's inertia, not necessity.
 
 ---
 
