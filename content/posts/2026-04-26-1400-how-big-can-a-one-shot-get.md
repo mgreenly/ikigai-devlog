@@ -23,7 +23,7 @@ Each iteration of the spec absorbs three signals: builder feedback, QA feedback,
 
 A single build is around 200k tokens at the top level, with twelve or more subagents spending 150k to 250k each. Wall clock started as low as ten minutes on iteration one and is now around four hours and twenty minutes. The spec is 60k lines across roughly 50 files. Each run produces around 600 tests against the implementation.
 
-The top-level agent's token spend isn't growing much. As the application gets larger, the surface for parallelism grows instead. Early runs spawned four subagents. Now it's twelve plus. My gut says we aren't a third of the way to whatever the actual ceiling is, but that's just speculation.
+The top-level agent's token spend isn't growing much. As the application gets larger, the surface for parallelism grows instead. Early runs spawned four subagents. Now it's twelve plus. My gut says that we're about a third of the way to the actual ceiling, but that's pure speculation.
 
 ## What We're Building
 
