@@ -29,7 +29,7 @@ The top-level agent's token spend isn't growing much. As the application gets la
 
 The application is an AD&D 2e play aid, similar in spirit to D&D Beyond. Character creation, equipment, spells, the buy and sell loop. I picked AD&D 2e on purpose. It has enough rules, modifiers, and bookkeeping to give the spec real surface area, which is exactly what a one-shot needs to be tested against. The combat simulator is what's coming next.
 
-It's a real chunk of an application now. We don't read the implementation closely between runs. Each build picks its own stack. One run lands in JavaScript, the next in Python. A few choices show up regularly without being prescribed, SQLite and server-side rendering most of all. Server-side rendering probably wins so often because the app is static content heavy. Otherwise the builds genuinely differ.
+The app has real scope at this point. We don't read the implementation closely between runs. Each build picks its own stack. One run lands in JavaScript, the next in Python. A few choices show up regularly without being prescribed, SQLite and server-side rendering most of all. Server-side rendering probably wins so often because the app is static content heavy. Otherwise the builds genuinely differ.
 
 ## Why This Isn't A Development Strategy
 
