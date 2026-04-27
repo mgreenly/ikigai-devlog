@@ -41,7 +41,7 @@ The ceiling is much higher than we'd assumed. Exit interviews are surprisingly p
 
 ## Some Early Takeaways
 
-Whatever spec system we eventually settle on probably has to be iterative. A four hour rebuild cycle isn't viable for normal development. But the ability to rebuild from a clean spec, even occasionally, has value. Exit interviews from a from-scratch build surface things an iterative project never sees, because the codebase quietly carries the answers the spec should have stated explicitly.
+Whatever spec system we eventually settle on has to be iterative. A four hour rebuild cycle isn't viable for normal development. But the ability to rebuild from a clean spec, even occasionally, has value. Exit interviews from a from-scratch build surface things an iterative project never sees, because the codebase quietly carries the answers the spec should have stated explicitly.
 
 Even if the day-to-day workflow stays incremental, running a clean rebuild as a background tool just to harvest the exit interview might be one of the better ways to keep a spec honest.
 
