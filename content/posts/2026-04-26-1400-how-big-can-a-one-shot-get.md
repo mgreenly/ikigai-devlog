@@ -39,7 +39,7 @@ The experiment is still worth doing, because of what we're learning along the wa
 
 The ceiling is much higher than we'd assumed. Exit interviews are surprisingly precise about where the spec is vague. Most of what we've learned about how to slice a spec for parallel execution came from the builder's feedback, not from us guessing. We've learned more about what a spec needs to contain by reading exit interviews than by writing any methodology.
 
-## What We Actually Took Away
+## Some Early Takeaways
 
 Whatever spec system we eventually settle on probably has to be iterative. A four hour rebuild cycle isn't viable for normal development. But the ability to rebuild from a clean spec, even occasionally, has value. Exit interviews from a from-scratch build surface things an iterative project never sees, because the codebase quietly carries the answers the spec should have stated explicitly.
 
