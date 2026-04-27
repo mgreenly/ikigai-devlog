@@ -35,7 +35,7 @@ The app has real scope at this point. Each build picks its own stack. One run la
 
 You can't ship one of these to production and put the next iteration on top. Naming, structure, framework choice, all of it shifts between runs. Nobody should run a real project this way.
 
-But the value in the experiment doesn't depend on the application surviving.
+The experiment is still worth doing, because of what we're learning along the way.
 
 The ceiling is much higher than we'd assumed. Exit interviews are surprisingly precise about where the spec is vague. Most of what we've learned about how to slice a spec for parallel execution came from the builder's feedback, not from us guessing. We've learned more about what a spec needs to contain by reading exit interviews than by writing any methodology.
 
