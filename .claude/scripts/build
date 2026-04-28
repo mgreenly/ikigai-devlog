@@ -548,10 +548,14 @@ def generate_css
     }
 
     /* Attribution line */
-    article > p:last-child em {
-      display: block;
+    article > p:last-child {
       margin-top: 2em;
       color: #666;
+    }
+
+    article > p:last-child em {
+      display: inline;
+      margin: 0;
     }
 
     /* Images in articles */
